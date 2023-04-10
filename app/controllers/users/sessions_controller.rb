@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+
   respond_to :json
 
   private
 
   def respond_with(resource, options={})
+    p("Want to print the resource: ", resource);
+
+    p("Resource name: ", resource_name);
+
+    resource2 = warden.authenticate(scope: resource_name)
+    p("Second resource: ", resource2)
     render json: {
       sucess: true,
       message: 'Signed in successfully',
       data: resource,
-      status: :ok 
+      status: {message: :ok, code: 200} 
     }
   end
 
@@ -26,7 +33,7 @@ class Users::SessionsController < Devise::SessionsController
       }
     else
       render json: {
-        status: 401,
+        status:{code: 401, message: :unauthorized},
         sucess: false,
         message: 'User has no session',
         

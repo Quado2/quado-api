@@ -11,14 +11,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
       render json: {
         sucess: true,
         message: 'Signed up successfully',
-        data: resource,
+        data: UserSerializer.new(resource).serializable_hash[:data][:attributes],
         status:200 
       }
     else
       render json: {
         sucess: false,
-        message: resource.errors.full_messages,
-        data: resource,
+        message: resource.errors.full_messages.to_sentence,
+        data: {},
         status: :unprocessable_entity,
       }
     end
