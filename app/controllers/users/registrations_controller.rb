@@ -1,27 +1,17 @@
-# frozen_string_literal: true
-
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
-  
   private
 
-  def respond_with(resource, options={})
+  def respond_with(resource, _opts = {})
     if resource.persisted?
-   
       render json: {
-        sucess: true,
-        message: 'Signed up successfully',
-        data: UserSerializer.new(resource).serializable_hash[:data][:attributes],
-        status:200 
+        status: {code: 200, message: 'Signed up sucessfully.'},
+        data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
       }
     else
       render json: {
-        sucess: false,
-        message: resource.errors.full_messages.to_sentence,
-        data: {},
-        status: :unprocessable_entity,
-      }
+        status: {message: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}"}
+      }, status: :unprocessable_entity
     end
   end
- 
 end
