@@ -1,11 +1,8 @@
 Rails.application.routes.draw do
-  get 'current_user/index'
-  devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    registrations: 'users/registrations'
-  }
-
-
-  get '/current_user', to: 'current_user#index'
-
+  namespace :api, defaults: {format: :jsonn} do
+    namespace :v1 do
+      post '/roles', to: 'roles#create'
+    end
+  end
+  get
 end
