@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       put '/users', to: 'users#update'
       get '/users', to: 'users#getall'
       get '/users/:id', to: 'users#find'
+      put '/users/add-role', to: 'users#add_role'
+      put '/users/remove-role', to: 'users#remove_role'
       
     end
   end
