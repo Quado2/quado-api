@@ -36,6 +36,13 @@ module ApplicationHelper
     json_response(error: exception.message, status: :not_found)
   end
 
+  def record_not_unique(exception)
+    json_response(error: exception.message, status: 409)
+  end
+
+  def general_error(exception)
+    json_response(error: exception.message, status: 500)
+  end
   def render_unauthorized(realm = 'Application')
     headers['WWW-Authenticate'] = %(Token realm="#{realm.gsub(/"/, '')}")
     json_response(error: 'Bad credentials', status: :unauthorized)

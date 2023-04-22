@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_21_061440) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_22_195715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -23,20 +23,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_061440) do
     t.index ["title"], name: "index_roles_on_title", unique: true
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "phone_number", null: false
     t.boolean "phone_verified", default: false, null: false
     t.boolean "email_verified", default: false, null: false
     t.boolean "active", default: true, null: false
-    t.string "password", null: false
     t.string "verification_token"
     t.datetime "verification_token_sent_at"
     t.datetime "last_sign_in_at"
     t.datetime "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
     t.index ["email"], name: "index_users_on_email"
   end
 
+  add_foreign_key "user_roles", "users"
 end
