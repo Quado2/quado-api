@@ -10,7 +10,7 @@ module Api
         
         if @user.persisted?
           @user.roles << @role
-          @user.update!
+          @user.save!
           return json_response(message: "User created", status: 201, object: @user)
         end
       end
