@@ -1,5 +1,7 @@
 module ApplicationHelper
   def json_response(object: {}, message: '', error: '', status: 200, meta: {}, include: [])
+    message = [message] if message.class.to_s == "String"
+    error = [error] if error.class.to_s == "String"
     render json: {
              success: is_success?(status),
              message: is_success?(status) ? message : error,
