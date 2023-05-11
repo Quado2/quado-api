@@ -14,10 +14,9 @@ Rails.application.routes.draw do
       get '/users/:id', to: 'users#find'
       put '/users/add-role', to: 'users#add_role'
       put '/users/remove-role', to: 'users#remove_role'
+      post 'users/verify-token', to: 'users#verify_token'
 
-      #VERIFICIATIONS
-
-      get '/verify-token', to: 'verification#verify_token'
+      post  'users/login', to 'session#login'
       
     end
   end
