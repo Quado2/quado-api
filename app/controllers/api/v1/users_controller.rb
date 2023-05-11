@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Api
   module V1
     class UsersController < ApiController
@@ -10,8 +12,13 @@ module Api
         
         if @user.persisted?
           @user.roles << @role
+          code = SecureRandom.hex;
+          @user.verification_token = code
+          @user.verification_token_sent_at = DateTime.now
           @user.save!
-          return json_response(message: "User created", status: 201, object: @user)
+          url = "http://localhost:4000/api/v1/verify-token?token=#{code}"
+          UserAccountMailer.with(user: @user, url: url,role: 'viewer').account_confirmation.deliver_now
+          return json_response(message: "User created! Check your email for confimation", status: 201)
         end
       end
 
@@ -22,7 +29,7 @@ module Api
 
         p user_role
         user = User.includes(:roles).find(params[:user_id])
-        return json_response(message: "User linked to role", status: 201, object: user)
+        return json_response(message: "User linked to role", status: 201, object: serialize(user))
       end
 
 

@@ -46,7 +46,17 @@ group :development do
   # gem "spring"
 end
 
-gem 'fast_jsonapi'
+
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
+
+#serializers
+gem 'jsonapi-serializer'
+
+
+#mail gun
+gem 'mailgun-ruby', '~>1.2.8'
+
+#ffi
+gem 'ffi'
