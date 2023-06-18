@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       put '/users/remove-role', to: 'users#remove_role'
       post 'users/verify-token', to: 'users#verify_token'
 
-      post  'users/login', to 'session#login'
+      post  'users/login', to: 'session#login'
       
     end
   end

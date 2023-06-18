@@ -7,7 +7,8 @@ module Api
       before_action :user_sign_up_params, :verify_role, only: [:create]
 
       def create
-        p(user_sign_up_params)
+
+        p "At the controller"
         @user = User.create!(user_sign_up_params)
         
         if @user.persisted?
@@ -31,14 +32,12 @@ module Api
         user.email_verified = true;
         json_response(message: "User verified succesfully!}", status: 200) if user.save!
       end
-      
+
 
       def add_role
         user = User.find(params[:user_id])
         role = Role.find(params[:role_id])
         user_role = UserRole.create!(user_id: params[:user_id], role_id: params[:role_id])
-
-        p user_role
         user = User.includes(:roles).find(params[:user_id])
         return json_response(message: "User linked to role", status: 201, object: serialize(user))
       end

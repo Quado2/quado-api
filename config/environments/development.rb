@@ -64,11 +64,4 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   config.action_mailer.default_url_options = { host: 'localhost', port: 4000 }
 
-  #Mailgun config
-  config.action_mailer.delivery_method = :mailgun
-  config.action_mailer.mailgun_settings = {
-    api_key: "fbc9adfef19e4ed2267d6fdb76f37855-90346a2d-43f5aa4d",
-    domain: 'test.vreg.ng'
-  }
-
 end

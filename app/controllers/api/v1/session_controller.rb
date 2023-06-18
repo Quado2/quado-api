@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate
 
       def login 
-        const 
+        
       end
 
 

@@ -60,3 +60,5 @@ gem 'mailgun-ruby', '~>1.2.8'
 
 #ffi
 gem 'ffi'
+
+gem 'dotenv-rails', groups: %i[development test]
