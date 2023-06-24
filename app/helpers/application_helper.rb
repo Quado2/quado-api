@@ -1,10 +1,9 @@
 module ApplicationHelper
-  def json_response(object: {}, message: '', error: '', status: 200, meta: {}, include: [])
+  def json_response(object: {}, message: '',  status: 200, meta: {}, include: [])
     message = [message] if message.class.to_s == "String"
-    error = [error] if error.class.to_s == "String"
     render json: {
              success: is_success?(status),
-             message: is_success?(status) ? message : error,
+             message: message ,
              data: object,
              meta: meta
            }, status: status, include: include
@@ -43,10 +42,10 @@ module ApplicationHelper
   end
 
   def general_error(exception)
-    json_response(error: exception.message, status: 500)
+    json_response(message: exception.message, status: 500)
   end
   def render_unauthorized(realm = 'Application')
     headers['WWW-Authenticate'] = %(Token realm="#{realm.gsub(/"/, '')}")
-    json_response(error: 'Bad credentials', status: :unauthorized)
+    json_response(message: 'Bad credentials', status: :unauthorized)
   end
 end

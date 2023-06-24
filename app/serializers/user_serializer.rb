@@ -4,6 +4,7 @@ class UserSerializer
     :active, :roles
 
     attribute :roles do |object, params|
-      RoleSerializer.new(object.roles).serializable_hash[:data]
+      roles = RoleSerializer.new(object.roles).serializable_hash[:data]
+      roles.map { |role| role[:attributes]}
     end
 end

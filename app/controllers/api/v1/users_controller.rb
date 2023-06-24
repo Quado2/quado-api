@@ -8,25 +8,23 @@ module Api
 
       def create
 
-        p "At the controller"
-        @user = User.create!(user_sign_up_params)
+        @user = User.new(user_sign_up_params)
+        @user.roles << @role
+        code = SecureRandom.hex;
+        @user.verification_token = code
+        @user.verification_token_sent_at = DateTime.now
+        url = "http://localhost:4000/api/v1/users/verify-token?token=#{code}"
+        @user.save!
+        UserMailer.with(user: @user, url: url, role: 'viewer').verify_email.deliver_later
         
-        if @user.persisted?
-          @user.roles << @role
-          code = SecureRandom.hex;
-          @user.verification_token = code
-          @user.verification_token_sent_at = DateTime.now
-          @user.save!
-          url = "http://localhost:4000/api/v1/verify-token?token=#{code}"
-          UserAccountMailer.with(user: @user, url: url,role: 'viewer').account_confirmation.deliver_now
-          return json_response(message: "User created! Check your email for confimation", status: 201)
-        end
+        return json_response(message: "User created! Check your email for confimation", status: 201)
       end
 
 
       def verify_token
+        
         token = params[:token]
-        return json_response(error: "No token provided !", status: 400) if(token.size < 1)
+        return json_response(error: "No token provided !", status: 400) unless(token)
         user = User.find_by(verification_token: token)        
         return json_response(error: "Invalid token provided !", status: 404) unless user
         user.email_verified = true;
@@ -49,7 +47,6 @@ module Api
           :password_confirmation, 
           :email, 
           :phone_number,
-          :role,   
         )
       end
 

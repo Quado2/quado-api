@@ -11,12 +11,15 @@ Rails.application.routes.draw do
       post '/users', to: 'users#create'
       put '/users', to: 'users#update'
       get '/users', to: 'users#getall'
-      get '/users/:id', to: 'users#find'
       put '/users/add-role', to: 'users#add_role'
       put '/users/remove-role', to: 'users#remove_role'
-      post 'users/verify-token', to: 'users#verify_token'
+      get '/users/verify-token', to: 'users#verify_token'
 
       post  'users/login', to: 'session#login'
+
+
+
+      # get '/users/:id', to: 'users#find'
       
     end
   end
