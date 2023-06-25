@@ -3,7 +3,8 @@ module ApiHelpers
 include Constants;
 
   def authenticate
-    access_token = request.headers["token"]
+    authorization = request.headers["Authorization"]
+    access_token = authorization&.split(" ")[1] if(authorization)
     p "Obtained token", access_token
     return render_unauthorized unless access_token
 

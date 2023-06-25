@@ -46,11 +46,15 @@ module ApplicationHelper
   end
 
   def render_unauthorized()
-    json_response(message: 'You are not authorized to perform this action, log in to perform this action', status: :unauthorized)
+    json_response(message: 'You are not authorized! log in to perform this action', status: :unauthorized)
   end
 
   def render_bad_credentials()
     json_response(message: 'Bad Credentials', status: :unauthorized)
+  end
+
+  def render_logged_out()
+    json_response(message: 'User logged out successfully!', status: :ok)
   end
 
 

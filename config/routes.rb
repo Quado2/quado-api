@@ -16,8 +16,8 @@ Rails.application.routes.draw do
       get '/users/verify-token', to: 'users#verify_token'
 
       post  'users/login', to: 'session#login'
-
-
+      post 'users/logout', to: 'session#logout'
+      get 'users/refresh-token', to: 'session#refresh_access_token'
 
       # get '/users/:id', to: 'users#find'
       
