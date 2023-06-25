@@ -44,8 +44,14 @@ module ApplicationHelper
   def general_error(exception)
     json_response(message: exception.message, status: 500)
   end
-  def render_unauthorized(realm = 'Application')
-    headers['WWW-Authenticate'] = %(Token realm="#{realm.gsub(/"/, '')}")
-    json_response(message: 'Bad credentials', status: :unauthorized)
+
+  def render_unauthorized()
+    json_response(message: 'You are not authorized to perform this action, log in to perform this action', status: :unauthorized)
   end
+
+  def render_bad_credentials()
+    json_response(message: 'Bad Credentials', status: :unauthorized)
+  end
+
+
 end

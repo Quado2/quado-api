@@ -2,6 +2,7 @@ module Api
   module V1
     class SessionController < ApiController
 
+      skip_before_action :authenticate
 
       def login 
         email = params[:email]
@@ -12,36 +13,42 @@ module Api
         end
         
         @user = User.find_by(email: email)
-        return render_unauthorized unless @user
+        return render_bad_credentials unless @user
    
         if(@user.authenticate(password))
+          access_exp = (Time.current + JWT_ACCESS_TOKEN_EXPIRY).to_i
+          refresh_exp = (Time.current + JWT_REFRESH_TOKEN_EXPIRY).to_i
 
           access_payload = {
-            user_Id: @user.id, 
-            exp: Time.now.to_i + JWT_ACCESS_TOKEN_EXPIRY
+            user_id: @user.id, 
+            exp: access_exp
           }
           refresh_payload = {
-            user_Id: @user.id, 
-            exp: Time.now.to_i + JWT_REFRESH_TOKEN_EXPIRY
+            user_id: @user.id, 
+            exp: refresh_exp
           }
 
-          #using the user id as key save the tokens and it's expiry as a list
-          #in redis, but remove all expired tokens before saving to the the list
-
-          #to save to redis, include the expiry as part of the last item;
-          
-
-
-          accessToken = JWT.encode(access_payload,JWT_SECRET)
-          refreshToken = JWT.encode({user_id:@user.email}, JWT_SECRET)
+          access_token = JWT.encode(access_payload,JWT_SECRET)
+          refresh_token = JWT.encode(refresh_payload, JWT_SECRET)
           serialized_user = UserSerializer.new(@user).serializable_hash[:data][:attributes]
+
+          #to save token to whitelist, include the expiry as part of the last item;
+          add_to_whitelist(@user.id, access_token+":"+access_exp.to_s )
+          add_to_whitelist(@user.id, refresh_token+":"+refresh_exp.to_s )
 
           return json_response(
             message: "Login Successful",
-            object: {accessToken: accessToken, refreshToken: refreshToken, user: serialized_user}
+            object: {access_token: access_token, refresh_token: refresh_token, user: serialized_user}
             )
         end
-        return render_unauthorized
+        return render_bad_credentials
+      end
+
+
+      def logout
+        token = request.headers["token"]
+
+
       end
       
     end
