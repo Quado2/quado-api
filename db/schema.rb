@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_07_213859) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_28_182816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "mods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "privileges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "role_id", null: false
+    t.uuid "mod_id", null: false
+    t.boolean "create"
+    t.boolean "edit"
+    t.boolean "update"
+    t.boolean "delete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mod_id"], name: "index_privileges_on_mod_id"
+    t.index ["role_id"], name: "index_privileges_on_role_id"
+  end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title"
@@ -23,7 +43,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_213859) do
     t.index ["title"], name: "index_roles_on_title", unique: true
   end
 
-  create_table "user_roles", force: :cascade do |t|
+  create_table "user_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "role_id", null: false
     t.datetime "created_at", null: false
@@ -48,5 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_07_213859) do
     t.index ["email"], name: "index_users_on_email"
   end
 
+  add_foreign_key "privileges", "mods"
+  add_foreign_key "privileges", "roles"
   add_foreign_key "user_roles", "users"
 end

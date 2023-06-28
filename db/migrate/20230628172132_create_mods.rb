@@ -1,6 +1,6 @@
-class CreatePrograms < ActiveRecord::Migration[7.0]
+class CreateMods < ActiveRecord::Migration[7.0]
   def change
-    create_table :programs do |t|
+    create_table :mods, id: :uuid do |t|
       t.string :title
       t.string :name
 

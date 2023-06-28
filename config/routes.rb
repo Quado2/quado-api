@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :programs
+ 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
 
@@ -22,6 +22,9 @@ Rails.application.routes.draw do
       get 'users/refresh-token', to: 'session#refresh_access_token'
 
       # get '/users/:id', to: 'users#find'
+
+      resources :privileges
+      resources :mods
       
     end
   end
