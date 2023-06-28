@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :programs
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
 
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
       post '/users', to: 'users#create'
       put '/users', to: 'users#update'
       get '/users', to: 'users#getall'
+      delete '/users/:id', to: 'users#delete_user'
       put '/users/add-role', to: 'users#add_role'
       put '/users/remove-role', to: 'users#remove_role'
       get '/users/verify-token', to: 'users#verify_token'

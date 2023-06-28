@@ -7,7 +7,6 @@ module Api
       before_action :user_sign_up_params, :verify_role, only: [:create]
 
       def create
-
         @user = User.new(user_sign_up_params)
         @user.roles << @role
         code = SecureRandom.hex;
@@ -22,13 +21,21 @@ module Api
 
 
       def verify_token
-        
         token = params[:token]
         return json_response(error: "No token provided !", status: 400) unless(token)
         user = User.find_by(verification_token: token)        
         return json_response(error: "Invalid token provided !", status: 404) unless user
         user.email_verified = true;
         json_response(message: "User verified succesfully!}", status: 200) if user.save!
+      end
+
+      def delete_user
+        id = params['id']
+
+        #check if this user can delete so implements modules.
+        p id
+
+        json_response(message: "deleted !")
       end
 
 
