@@ -1,6 +1,6 @@
 class RoleSerializer
   include JSONAPI::Serializer
-  attributes :title, :description 
+  attributes :id, :title, :description 
   
 
 end

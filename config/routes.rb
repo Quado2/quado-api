@@ -5,8 +5,9 @@ Rails.application.routes.draw do
 
       # ROLES
       post '/roles', to: 'roles#create'
-      get '/roles', to: 'roles#getall'
+      get '/roles', to: 'roles#index'
       get '/roles/:id', to: 'roles#find'
+      delete '/roles/:id', to: 'roles#destroy'
 
       # USERS
       post '/users', to: 'users#create'

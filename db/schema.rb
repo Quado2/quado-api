@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_28_182816) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_113739) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -25,12 +25,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_182816) do
   create_table "privileges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "role_id", null: false
     t.uuid "mod_id", null: false
-    t.boolean "create"
-    t.boolean "edit"
-    t.boolean "update"
-    t.boolean "delete"
+    t.boolean "can_create"
+    t.boolean "can_edit"
+    t.boolean "can_delete"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "can_read"
     t.index ["mod_id"], name: "index_privileges_on_mod_id"
     t.index ["role_id"], name: "index_privileges_on_role_id"
   end

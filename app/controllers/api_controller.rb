@@ -4,6 +4,7 @@ class ApiController < ActionController::API
   include ApiHelpers
   include Constants
   include Serializable
+  
   include ActionController::HttpAuthentication::Token::ControllerMethods
   rescue_from ActiveRecord::RecordNotUnique, with: :record_not_unique
   rescue_from ActiveRecord::RecordInvalid, with: :unprocessable
