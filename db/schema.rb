@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_29_113739) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_151547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_29_113739) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "can_read"
+    t.index ["mod_id", "role_id"], name: "index_privileges_on_mod_id_and_role_id", unique: true
     t.index ["mod_id"], name: "index_privileges_on_mod_id"
     t.index ["role_id"], name: "index_privileges_on_role_id"
   end
@@ -48,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_29_113739) do
     t.uuid "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["role_id", "user_id"], name: "index_user_roles_on_role_id_and_user_id", unique: true
     t.index ["role_id"], name: "index_user_roles_on_role_id"
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end

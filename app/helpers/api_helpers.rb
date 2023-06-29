@@ -5,7 +5,6 @@ include Constants;
   def authenticate
     authorization = request.headers["Authorization"]
     access_token = authorization&.split(" ")[1] if(authorization)
-    p "Obtained token", access_token
     return render_unauthorized unless access_token
 
     begin
@@ -40,5 +39,10 @@ include Constants;
     else
       false
     end
+  end
+
+  def is_authorized?
+    p request.method, request.path
+    p @current_user.roles[0].privileges
   end
 end

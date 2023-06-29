@@ -42,9 +42,9 @@ module Api
       def add_role
         user = User.find(params[:user_id])
         role = Role.find(params[:role_id])
-        user_role = UserRole.create!(user_id: params[:user_id], role_id: params[:role_id])
-        user = User.includes(:roles).find(params[:user_id])
-        return json_response(message: "User linked to role", status: 201, object: serialize(user))
+        user.roles = []
+        user.roles << role;
+        return json_response(message: "User linked to role", status: 201, object: json_serialize(UserSerializer, user))
       end
 
 

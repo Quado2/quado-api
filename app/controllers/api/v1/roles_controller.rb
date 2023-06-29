@@ -20,7 +20,6 @@ module Api
       end
 
       def destroy
-        
         if @role.destroy
           return json_response(message: "Role deleted", status: :ok)
         else

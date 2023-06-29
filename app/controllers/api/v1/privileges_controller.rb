@@ -6,38 +6,40 @@ module Api
       # GET /privileges
       def index
         @privileges = Privilege.all
-        json_response(message: "Privileges fetched !", object: json_serialize(PrivilegeSerializer, @priviliges))
+        json_response(message: "Privileges fetched !", object: json_serialize(PrivilegeSerializer, @privileges))
       end
 
       # GET /privileges/1
       def show
-        render json: @privilege
+        json_response(message: "Privilege fetched !", object: json_serialize(PrivilegeSerializer, @privilege))
       end
 
       # POST /privileges
       def create
-        p 'in create privilege'
         @privilege = Privilege.new(privilege_params)
-        p "The created privile", @privilege
         if @privilege.save
-          render json: @privilege, status: :created
+          json_response(message: "Privilege created !", object: json_serialize(PrivilegeSerializer, @privilege), status: :created)
         else
-          render json: @privilege.errors, status: :unprocessable_entity
+          json_response(message: @privilege.errors.full_messages, status: :unprocessable_entity)
         end
       end
 
       # PATCH/PUT /privileges/1
       def update
         if @privilege.update(privilege_params)
-          render json: @privilege
+          json_response(message: "Privilege updated !", object: json_serialize(PrivilegeSerializer, @privilege), status: :ok)
         else
-          render json: @privilege.errors, status: :unprocessable_entity
+          json_response(message: @privilege.errors.full_messages, status: :unprocessable_entity)
         end
       end
 
       # DELETE /privileges/1
       def destroy
-        @privilege.destroy
+        if @privilege.destroy
+          json_response(message: "Privilege deleted !", status: :ok)
+        else
+          json_response(message: @privilege.errors.full_messages, status: :unprocessable_entity)
+        end
       end
 
       private
