@@ -3,8 +3,8 @@ module Api
     class SessionController < ApiController
 
       skip_before_action :authenticate, except: [:refresh_access_token]
-      skip_before_action :is_authorized
-      
+      skip_before_action :is_authorized?
+
       def login 
         email = params[:email]
         password = params[:password]

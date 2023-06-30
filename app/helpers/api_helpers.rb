@@ -41,8 +41,29 @@ include Constants;
     end
   end
 
+ 
+
   def is_authorized?
-    p request.method, request.path
-    p @current_user.roles[0].privileges
+    method = request.method
+    mod = request.path.split("/")[3]
+    privileges = @current_user.roles[0]&.privileges
+
+    return json_response(message: "You have no assigned role", status: 403) unless privileges
+
+    if(@current_user.roles[0].title == 'super-admin')
+      return
+    end
+
+    #find the particular privilege related to the mod
+    interest_privilege = privileges.find {|privilege| privilege.mod&.name&.downcase === mod.downcase }
+    return json_response(message: "You don't have the privilege to access this module", status: :forbidden) unless interest_privilege
+    
+    #check for authorization
+    interest_access = METHOD_PRIVILEGE_MAP[method.downcase]
+    user_authorized = interest_privilege[interest_access]
+    return json_response(message: "You are not authorized for this action", status: 403) unless user_authorized
+    
   end
+
+ 
 end
